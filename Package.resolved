@@ -1,0 +1,24 @@
+{
+  "originHash" : "c3d2b3eb5a2703de1948cb266cefeeda08eed408103d6e85593e5c0c37550695",
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "d120af1e8638c7da36c8481fd61a66c0c08dc4fc",
+        "version" : "5.4.4"
+      }
+    },
+    {
+      "identity" : "cryptoswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
+      "state" : {
+        "revision" : "5669f222e46c8134fb1f399c745fa6882b43532e",
+        "version" : "1.3.8"
+      }
+    }
+  ],
+  "version" : 3
+}
