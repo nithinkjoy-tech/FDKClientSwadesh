@@ -17,7 +17,7 @@ public extension ApplicationClient.Content {
         
         public var params: [String: [String]]?
         
-        public var query: [String: [String]]?
+        public var query: [String: Any]?
         
         public var url: String?
         
@@ -51,10 +51,8 @@ public extension ApplicationClient.Content {
         required public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             
-            
             do {
                 params = try container.decode([String: [String]].self, forKey: .params)
-            
             } catch DecodingError.typeMismatch(let type, let context) {
                 print("Type '\(type)' mismatch:", context.debugDescription)
                 print("codingPath:", context.codingPath)
@@ -62,23 +60,28 @@ public extension ApplicationClient.Content {
                 
             }
             
-            
-            
+            // FIXED: Decode query to handle both String and [String] values
             do {
-                query = try container.decode([String: [String]].self, forKey: .query)
-            
+                // First try as [String: [String]]
+                if let arrayQuery = try? container.decode([String: [String]].self, forKey: .query) {
+                    query = arrayQuery
+                }
+                // Then try as [String: String] and convert to Any
+                else if let stringQuery = try? container.decode([String: String].self, forKey: .query) {
+                    query = stringQuery
+                }
+                else {
+                    query = nil
+                }
             } catch DecodingError.typeMismatch(let type, let context) {
                 print("Type '\(type)' mismatch:", context.debugDescription)
                 print("codingPath:", context.codingPath)
             } catch {
-                
+                print("Query decode error: \(error)")
             }
-            
-            
             
             do {
                 url = try container.decode(String.self, forKey: .url)
-            
             } catch DecodingError.typeMismatch(let type, let context) {
                 print("Type '\(type)' mismatch:", context.debugDescription)
                 print("codingPath:", context.codingPath)
@@ -86,12 +89,7 @@ public extension ApplicationClient.Content {
                 
             }
             
-            
-            
             type = try container.decode(PageType.self, forKey: .type)
-            
-            
-            
         }
         
         public func encode(to encoder: Encoder) throws {
